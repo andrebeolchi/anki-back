@@ -12,6 +12,7 @@ import { globalErrorHandler } from '~/services/_errors'
 import fastifyJwt from '@fastify/jwt'
 
 import { env } from '~/env'
+import { deckRoutes } from './http/controllers/deck/routes'
 
 export const app = fastify()
 
@@ -45,6 +46,7 @@ app.setSerializerCompiler(serializerCompiler)
 app.withTypeProvider<ZodTypeProvider>()
 
 app.register(userRoutes)
+app.register(deckRoutes)
 app.register(statusRoutes)
 
 // Set Error Handler

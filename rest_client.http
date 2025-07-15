@@ -1,6 +1,6 @@
 @BASE_URL=http://localhost:3000
-@USER_ID=
-@USER_TOKEN=
+@USER_ID=db8aacb8-427a-4f13-b0e9-511ce551625b
+@USER_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRiOGFhY2I4LTQyN2EtNGYxMy1iMGU5LTUxMWNlNTUxNjI1YiIsImVtYWlsIjoiYW5kcmVnYXJiaW5pMjAwMUBnbWFpbC5jb20iLCJuYW1lIjoidGVzdF9kb2UyIiwiY3JlYXRlZEF0IjoiMjAyNS0wNy0xNVQwMDoyOToyMy42MzJaIiwidXBkYXRlZEF0IjoiMjAyNS0wNy0xNVQwMDoyOToyMy42MzJaIiwiaWF0IjoxNzUyNTQyODc4LCJleHAiOjE3NTI1NDM0Nzh9.RTmeAYlc7Gejee82aCLoOKo5LDdMDX42mEZR6yGV0Rk
 
 ### Login
 
@@ -21,4 +21,24 @@ Content-Type: application/json
     "email": "andregarbini2001@gmail.com",
     "name": "test_doe2",
     "password": "112233"
+}
+
+### Create a new deck
+POST {{BASE_URL}}/decks
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+    "title": "Test Deck",
+    "description": "This is a test deck",
+    "cards" : [
+        {
+            "question": "What is the capital of France?",
+            "answer": "Paris"
+        },
+        {
+            "question": "What is 2 + 2?",
+            "answer": "4"
+        }
+    ]
 }

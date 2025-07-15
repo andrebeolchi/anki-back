@@ -1,7 +1,7 @@
 import { User } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { omit } from 'ramda'
-import { IUser } from '~/models/user-interface'
+import { IUser } from '~/models'
 
 import { ICreateUserData, IUserRepository } from '~/repositories/user-repository'
 

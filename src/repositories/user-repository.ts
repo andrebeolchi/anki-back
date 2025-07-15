@@ -1,4 +1,4 @@
-import { IUser } from '~/models/user-interface'
+import { IUser } from '~/models'
 
 export interface ICreateUserData {
   email: string
