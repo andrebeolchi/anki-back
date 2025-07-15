@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid()) @db.Uuid
+  email    String  @unique
+  password String
+  name     String
+
+  cards     UserCard[]
+  userDecks UserDeck[]
+  decks     Deck[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// Decks and Cards
+enum DeckStatus {
+  public
+  private
+}
+
+model Deck {
+  id        String @id @default(uuid()) @db.Uuid
+  creatorId String @map("creator_id") @db.Uuid
+
+  title       String
+  description String?
+  status      DeckStatus @default(private)
+
+  creator   User       @relation(fields: [creatorId], references: [id])
+  cards     Card[]
+  userDecks UserDeck[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+enum CardStatus {
+  new
+  learning
+  review
+  relearning
+  mature
+}
+
+model Card {
+  id     String @id @default(uuid()) @db.Uuid
+  deckId String @map("deck_id") @db.Uuid
+
+  question String
+  answer   String
+
+  deck      Deck       @relation(fields: [deckId], references: [id])
+  userCards UserCard[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model UserCard {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  cardId String @map("card_id") @db.Uuid
+
+  status       CardStatus @default(new)
+  lastReviewed DateTime?  @map("last_reviewed")
+  nextReview   DateTime?  @map("next_review")
+
+  user User @relation(fields: [userId], references: [id])
+  card Card @relation(fields: [cardId], references: [id])
+
+  answers UserCardAnswer[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([userId, cardId])
+}
+
+model UserCardAnswer {
+  id         String @id @default(uuid()) @db.Uuid
+  userCardId String @map("user_card_id") @db.Uuid
+
+  userAnswer String  @map("user_answer")
+  isCorrect  Boolean @map("is_correct")
+
+  userCard UserCard @relation(fields: [userCardId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+model UserDeck {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  deckId String @map("deck_id") @db.Uuid
+
+  currentStreak Int       @default(0) @map("current_streak")
+  maxStreak     Int       @default(0) @map("max_streak")
+  lastStudyAt   DateTime? @map("last_study_at")
+
+  user User @relation(fields: [userId], references: [id])
+  deck Deck @relation(fields: [deckId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([userId, deckId])
+  @@index([userId, deckId])
+}

@@ -1,0 +1,24 @@
+@BASE_URL=http://localhost:3000
+@USER_ID=
+@USER_TOKEN=
+
+### Login
+
+POST {{BASE_URL}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "andregarbini2001@gmail.com",
+    "password": "112233"
+}
+
+### Create a new user
+
+POST {{BASE_URL}}/users
+Content-Type: application/json
+
+{
+    "email": "andregarbini2001@gmail.com",
+    "name": "test_doe2",
+    "password": "112233"
+}
