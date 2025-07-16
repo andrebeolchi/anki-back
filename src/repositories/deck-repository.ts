@@ -1,6 +1,6 @@
 import { ICard, IDeck } from "~/models"
 
-export type ICreateDeckData = Pick<IDeck, 'creatorId' | 'title' | 'description'> & {
+export type ICreateDeckData = Pick<IDeck, 'creatorId' | 'title' | 'description' | 'status'> & {
   cards: Pick<ICard, 'question' | 'answer'>[]
 }
 

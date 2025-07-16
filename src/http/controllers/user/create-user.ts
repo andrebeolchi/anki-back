@@ -1,5 +1,6 @@
 import { hash } from 'bcryptjs'
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { omit } from 'ramda'
 import { z } from 'zod'
 import { makeCreateUserService } from '~/services/factory/make-create-user-service'
 
@@ -15,6 +16,7 @@ export const schema = {
   response: {
     201: z.object({
       id: z.string(),
+      token: z.string(),
       name: z.string(),
       email: z.string(),
       createdAt: z.date(),
@@ -35,5 +37,7 @@ export async function createUser(req: FastifyRequest, reply: FastifyReply) {
     password: hashedPassword,
   })
 
-  return reply.code(201).send(user)
+  const token = await reply.jwtSign(omit(['password'], user))
+
+  return reply.status(201).send({ token, ...omit(['password'], user) })
 }

@@ -7,7 +7,7 @@ import { signIn, schema as signInSchema } from './sign-in'
 export async function userRoutes(app: FastifyInstance) {
   // Create user
   app.withTypeProvider<ZodTypeProvider>().post(
-    '/users',
+    '/sign-up',
     {
       schema: createUserSchema,
     },

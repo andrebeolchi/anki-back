@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid()) @db.Uuid
-  email    String  @unique
+  id       String @id @default(uuid()) @db.Uuid
+  email    String @unique
   password String
   name     String
 
@@ -99,14 +99,20 @@ model UserCardAnswer {
   createdAt DateTime @default(now()) @map("created_at")
 }
 
+enum UserDeckStatus {
+  active
+  archived
+}
+
 model UserDeck {
   id     String @id @default(uuid()) @db.Uuid
   userId String @map("user_id") @db.Uuid
   deckId String @map("deck_id") @db.Uuid
 
-  currentStreak Int       @default(0) @map("current_streak")
-  maxStreak     Int       @default(0) @map("max_streak")
-  lastStudyAt   DateTime? @map("last_study_at")
+  currentStreak Int            @default(0) @map("current_streak")
+  maxStreak     Int            @default(0) @map("max_streak")
+  lastStudyAt   DateTime?      @map("last_study_at")
+  status        UserDeckStatus @default(active)
 
   user User @relation(fields: [userId], references: [id])
   deck Deck @relation(fields: [deckId], references: [id])
