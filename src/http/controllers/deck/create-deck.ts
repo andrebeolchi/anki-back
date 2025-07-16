@@ -3,9 +3,9 @@ import { z } from 'zod'
 import { makeCreateDeckService } from '~/services/factory/make-create-deck-service'
 
 export const schema = {
-  summary: 'Create User',
-  description: 'Create a new user',
-  tags: ['users'],
+  summary: 'Create Deck',
+  description: 'Create a new Deck',
+  tags: ['decks'],
   body: z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().optional(),

@@ -29,4 +29,3 @@ export interface ICard {
   createdAt?: Date
   updatedAt?: Date
 }
-

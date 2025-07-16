@@ -10,6 +10,7 @@ describe('Create Deck Service', () => {
       title: 'Deck 1',
       description: 'Description of Deck 1',
       creatorId: 'e5d200dc-328d-5612-a843-d8333f505a6c',
+      status: 'public',
       cards: [
         { question: 'What is the capital of France?', answer: 'Paris' },
         { question: 'What is 2 + 2?', answer: '4' },
