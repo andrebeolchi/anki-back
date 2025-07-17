@@ -91,4 +91,14 @@ export class PrismaDeckRepository implements IDeckRepository {
       orderBy: { createdAt: 'desc' }
     })
   }
+
+  async getDeckById(deckId: string) {
+    return await db.deck.findUnique({
+      where: { id: deckId },
+      include: {
+        cards: true,
+        creator: true
+      }
+    })
+  }
 }

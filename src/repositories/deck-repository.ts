@@ -11,6 +11,8 @@ export type IGetDecksResponse = (IDeck & {
   _count: { cards: number }
 })[]
 
+export type IGetUserDeckData = IDeck & { cards: ICard[]; creator: IUser }
+
 export interface IDeckRepository {
   create(data: ICreateDeckData): Promise<ICreateDeckResponse>
 
@@ -21,4 +23,6 @@ export interface IDeckRepository {
   getPrivateDecks(userId: string): Promise<IGetDecksResponse>
 
   getDecksForUser(userId: string): Promise<IGetDecksResponse>
+
+  getDeckById(deckId: string): Promise<IGetUserDeckData | null>
 }
