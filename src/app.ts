@@ -14,6 +14,7 @@ import fastifyJwt from '@fastify/jwt'
 import { env } from '~/env'
 import { deckRoutes } from './http/controllers/deck/routes'
 import { studyRoutes } from './http/controllers/study/routes'
+import { userDeckRoutes } from './http/controllers/user-deck/routes'
 
 export const app = fastify()
 
@@ -48,6 +49,7 @@ app.withTypeProvider<ZodTypeProvider>()
 
 app.register(userRoutes)
 app.register(deckRoutes)
+app.register(userDeckRoutes)
 app.register(studyRoutes)
 app.register(statusRoutes)
 

@@ -1,3 +1,4 @@
+import { omit } from 'ramda'
 import { db } from '~/adapters/db'
 import { ICreateDeckData, IDeckRepository } from '~/repositories/deck-repository'
 
@@ -10,86 +11,127 @@ export class PrismaDeckRepository implements IDeckRepository {
           createMany: {
             data: cards.map(card => ({
               question: card.question,
-              answer: card.answer
-            }))
-          }
-        }
+              answer: card.answer,
+            })),
+          },
+        },
       },
       include: {
-        cards: true
-      }
+        cards: true,
+      },
     })
   }
 
-  async getPublicDecks() {
-    return await db.deck.findMany({
+  async getPublicDecks(userId: string) {
+    const decks = await db.deck.findMany({
       where: { status: 'public' },
       include: {
         creator: true,
         _count: {
           select: {
-            cards: true
-          }
-        }
+            cards: true,
+          },
+        },
+        userDecks: {
+          where: {
+            userId,
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
+
+    return decks.map(deck => ({
+      ...omit(['_count'], deck),
+      cardsCount: deck._count.cards,
+      enrolled: deck.userDecks.length > 0,
+    }))
   }
 
-  async getPublicDecksByCreatorId(creatorId: string) {
-    return await db.deck.findMany({
+  async getPublicDecksByCreatorId(userId: string, creatorId: string) {
+    const decks = await db.deck.findMany({
       where: {
         creatorId,
-        status: 'public'
+        status: 'public',
       },
       include: {
         creator: true,
         _count: {
           select: {
-            cards: true
-          }
-        }
+            cards: true,
+          },
+        },
+        userDecks: {
+          where: {
+            userId,
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
+
+    return decks.map(deck => ({
+      ...omit(['_count'], deck),
+      cardsCount: deck._count.cards,
+      enrolled: deck.userDecks.length > 0,
+    }))
   }
 
-  async getPrivateDecks(creatorId: string) {
-    return await db.deck.findMany({
+  async getPrivateDecks(userId: string) {
+    const decks = await db.deck.findMany({
       where: {
         status: 'private',
-        creatorId
+        creatorId: userId,
       },
       include: {
         creator: true,
         _count: {
           select: {
-            cards: true
-          }
-        }
+            cards: true,
+          },
+        },
+        userDecks: {
+          where: {
+            userId,
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
+
+    return decks.map(deck => ({
+      ...omit(['_count'], deck),
+      cardsCount: deck._count.cards,
+      enrolled: deck.userDecks.length > 0,
+    }))
   }
 
   async getDecksForUser(userId: string) {
-    return await db.deck.findMany({
+    const decks = await db.deck.findMany({
       where: {
-        OR: [
-          { status: 'public' },
-          { status: 'private', creatorId: userId }
-        ]
+        OR: [{ status: 'public' }, { status: 'private', creatorId: userId }],
       },
       include: {
         creator: true,
         _count: {
           select: {
-            cards: true
-          }
-        }
+            cards: true,
+          },
+        },
+        userDecks: {
+          where: {
+            userId,
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
+
+    return decks.map(deck => ({
+      ...omit(['_count'], deck),
+      cardsCount: deck._count.cards,
+      enrolled: deck.userDecks.length > 0,
+    }))
   }
 
   async getDeckById(deckId: string) {
@@ -97,8 +139,8 @@ export class PrismaDeckRepository implements IDeckRepository {
       where: { id: deckId },
       include: {
         cards: true,
-        creator: true
-      }
+        creator: true,
+      },
     })
   }
 }

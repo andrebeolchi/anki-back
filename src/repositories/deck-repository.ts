@@ -1,4 +1,4 @@
-import { ICard, IDeck, IUser } from "~/models"
+import { ICard, IDeck, IUser } from '~/models'
 
 export type ICreateDeckData = Pick<IDeck, 'creatorId' | 'title' | 'description' | 'status'> & {
   cards: Pick<ICard, 'question' | 'answer'>[]
@@ -7,8 +7,9 @@ export type ICreateDeckData = Pick<IDeck, 'creatorId' | 'title' | 'description' 
 export type ICreateDeckResponse = IDeck & { cards: ICard[] }
 
 export type IGetDecksResponse = (IDeck & {
-  creator: IUser,
-  _count: { cards: number }
+  creator: IUser
+  cardsCount: number
+  enrolled: boolean
 })[]
 
 export type IGetUserDeckData = IDeck & { cards: ICard[]; creator: IUser }
@@ -16,9 +17,9 @@ export type IGetUserDeckData = IDeck & { cards: ICard[]; creator: IUser }
 export interface IDeckRepository {
   create(data: ICreateDeckData): Promise<ICreateDeckResponse>
 
-  getPublicDecks(): Promise<IGetDecksResponse>
+  getPublicDecks(userId: string): Promise<IGetDecksResponse>
 
-  getPublicDecksByCreatorId(creatorId: string): Promise<IGetDecksResponse>
+  getPublicDecksByCreatorId(userId: string, creatorId: string): Promise<IGetDecksResponse>
 
   getPrivateDecks(userId: string): Promise<IGetDecksResponse>
 

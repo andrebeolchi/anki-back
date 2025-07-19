@@ -1,4 +1,4 @@
-import { CardStatus } from "@prisma/client"
+import { CardStatus } from '@prisma/client'
 
 export interface IUser {
   id?: string
@@ -39,7 +39,7 @@ export interface IUserDeck {
 
   currentStreak?: number
   maxStreak?: number
-  lastStudyAt?: Date
+  lastStudyAt: Date | null
   status?: 'active' | 'archived'
 
   createdAt?: Date
@@ -54,7 +54,7 @@ export interface IUserCard {
   status: CardStatus
   lastReviewed: Date | null
   nextReview: Date | null
-} 
+}
 
 export interface IUserCardAnswer {
   id?: string

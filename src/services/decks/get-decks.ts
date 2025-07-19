@@ -7,15 +7,15 @@ interface IGetDecksParams {
 }
 
 export class GetDecksService {
-  constructor(private decksRepository: IDeckRepository) { }
+  constructor(private decksRepository: IDeckRepository) {}
 
   execute({ status, creatorId, userId }: IGetDecksParams) {
     if (creatorId) {
-      return this.decksRepository.getPublicDecksByCreatorId(creatorId)
+      return this.decksRepository.getPublicDecksByCreatorId(userId, creatorId)
     }
 
     if (status === 'public') {
-      return this.decksRepository.getPublicDecks()
+      return this.decksRepository.getPublicDecks(userId)
     }
 
     if (status === 'private') {
