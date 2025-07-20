@@ -1,7 +1,8 @@
 import { omit } from 'ramda'
 import { db } from '~/adapters/db'
-import { IChangeUserDeckStatusParams, IUserDeckRepository } from '../user-deck-repository'
+import { IChangeUserDeckStatusParams, IGetByUserIdAndDeckId, IUserDeckRepository } from '../user-deck-repository'
 import { ICreateUserDecksParams } from '~/services/user-decks/create-user-deck'
+import { IUserDeck } from '~/models'
 
 export class PrismaUserDeckRepository implements IUserDeckRepository {
   async getUserDecks(userId: string) {
@@ -45,6 +46,33 @@ export class PrismaUserDeckRepository implements IUserDeckRepository {
     return await db.userDeck.update({
       where: { id },
       data: { status },
+    })
+  }
+
+  async getByUserIdAndDeckId({ deckId, userId }: IGetByUserIdAndDeckId): Promise<IUserDeck | null> {
+    return await db.userDeck.findUnique({
+      where: {
+        userId_deckId: {
+          deckId,
+          userId,
+        },
+      },
+    })
+  }
+
+  async updateStreak({ deckId, userId, currentStreak, maxStreak, lastStudyAt }: IUserDeck): Promise<IUserDeck> {
+    return await db.userDeck.update({
+      where: {
+        userId_deckId: {
+          deckId,
+          userId,
+        },
+      },
+      data: {
+        currentStreak,
+        maxStreak,
+        lastStudyAt,
+      },
     })
   }
 }

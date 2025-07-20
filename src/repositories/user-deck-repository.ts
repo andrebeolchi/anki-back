@@ -11,8 +11,20 @@ export interface IChangeUserDeckStatusParams {
   status: 'active' | 'archived'
 }
 
+export interface IGetByUserIdAndDeckId {
+  userId: string
+  deckId: string
+}
+
+export interface IUpdateStreakBody extends Pick<IUserDeck, | 'currentStreak' | 'maxStreak' | 'lastStudyAt'> {
+  userId: string
+  deckId: string
+}
+
 export interface IUserDeckRepository {
   getUserDecks(userId: string): Promise<IGetUserDecksResponse>
   createUserDeck({ userId, deckId }: ICreateUserDecksParams): Promise<IUserDeck>
   changeUserDeckStatus({ id, status }: IChangeUserDeckStatusParams): Promise<IUserDeck>
+  getByUserIdAndDeckId(body: IGetByUserIdAndDeckId): Promise<IUserDeck | null>
+  updateStreak(body: IUpdateStreakBody): Promise<IUserDeck>
 }

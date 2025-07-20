@@ -37,8 +37,8 @@ export interface IUserDeck {
   userId: string
   deckId: string
 
-  currentStreak?: number
-  maxStreak?: number
+  currentStreak: number
+  maxStreak: number
   lastStudyAt: Date | null
   status?: 'active' | 'archived'
 

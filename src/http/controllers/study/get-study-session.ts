@@ -28,8 +28,8 @@ export const schema = {
           userCard: z.object({
             id: z.string().uuid(),
             status: z.enum(['new', 'learning', 'review', 'relearning', 'mature']),
-            lastReviewed: z.string().datetime().nullable(),
-            nextReview: z.string().datetime().nullable()
+            lastReviewed: z.date().nullable(),
+            nextReview: z.date().nullable()
           }).nullable()
         })
       ),
