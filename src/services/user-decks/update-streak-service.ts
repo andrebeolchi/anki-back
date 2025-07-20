@@ -22,7 +22,10 @@ export class UpdateStreakService {
     const lastStr = userDeck.lastStudyAt?.toDateString()
 
     if (lastStr === todayStr) {
-      return userDeck
+      return await this.userDeckRepository.updateStreak({
+        ...userDeck,
+        lastStudyAt: today,
+      })
     }
 
     const yesterday = new Date(today)
@@ -37,7 +40,7 @@ export class UpdateStreakService {
       deckId,
       currentStreak: newStreak,
       maxStreak,
-      lastStudyAt: today
+      lastStudyAt: today,
     })
   }
 }
